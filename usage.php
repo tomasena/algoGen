@@ -6,9 +6,12 @@ spl_autoload_register(function ($class_name) {
 });
 
 // Définir le chemin d'accès au fichier CSV
-$csv = '../donnees/data1.csv';
+$csv = '../donnees/data2.csv';
 $gd = new GetData();
 $tab = $gd->read($csv);
 
 var_dump($tab);
+
+$ind = new Individu(); //individu aléatoire
+var_dump($ind);
 
