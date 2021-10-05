@@ -52,8 +52,7 @@ class Individu{
        
         $this->valCote= (self::$intervalCote) * $this->cote + 1.0;
         $this->valDiff= (self::$intervalDiff) * $this->diff - 2.0;
-    }
-    
+    }    
     public function reproduction(Individu $b) { // crossover entre $this et $b
         $cut = random_int(1,strlen($b->getChromo()-1)); // coupes : 0 à ($cut-1) et $cut à length
         $a1 = substr($this->getChromo(),0,$cut);
@@ -63,6 +62,14 @@ class Individu{
         $a1b2 = new Individu($a1 . $b2);
         $b1a2 = new Individu($b1 . $a2);
         return array($a1b2,$b1a2);
+    }
+    public function mute(){
+        $chromo = $this->getChromo();
+        $nBit = random_int(0,strlen($chromo));
+        $bit = substr($chromo,$nBit,1);
+        $bit = ($bit == "1") ? "0" : "1";
+        $chromo = substr_replace($chromo, $bit, $nBit, 1); 
+        return new Individu($chromo);
     }
     public function gen(int $max){ //entier aleatoire entre 0 et $max
         return random_int(0, $max);

@@ -10,7 +10,8 @@ $data = new Data( '../donnees/data3.csv');
 //var_dump($gd);
 
 $ag = new AlgoGen($data); //individus aléatoires
-$ag->nouGen();
+$ag->evolution();
+
 
 
 /*
