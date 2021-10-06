@@ -51,7 +51,7 @@ class Individu{
         $this->unXdeux= bindec((int) substr($chromo,0,2));   // trois posibles valeurs : 0, 1, 2
         $this->valUnXdeux =  ($this->unXdeux == 0) ? "H" : (($this->unXdeux == 1) ? "D" : "A");
         $this->cote= bindec((int) substr($chromo,2,self::COTE)) ;
-        $this->diff= bindec((int) substr($chromo,self::COTE+2,self::DIFF-1));
+        $this->diff= bindec((int) substr($chromo,self::COTE+2,self::DIFF));
        
         $this->valCote= (self::$intervalCote) * $this->cote + 1.0;
         $this->valDiff= (self::$intervalDiff) * $this->diff - 2.0;
@@ -69,10 +69,12 @@ class Individu{
     }
     public function mute(){
         $chromo = $this->getChromo();
-        $nBit = random_int(0,strlen($chromo));
+        //echo "mute : $chromo";
+        $nBit = random_int(0,strlen($chromo)-1);
         $bit = substr($chromo,$nBit,1);
         $bit = ($bit == "1") ? "0" : "1";
         $chromo = substr_replace($chromo, $bit, $nBit, 1); 
+        //echo " -> $chromo <br>";
         return new Individu($chromo, $this->ng+1);
     }
     public function gen(int $max){ //entier aleatoire entre 0 et $max

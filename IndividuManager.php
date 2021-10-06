@@ -30,6 +30,11 @@ class IndividuManager
         'nbPerdus'=>  $ind->getNbPerdus()
 	));
   }
+  public function addList($liste){
+    foreach($liste as $ind) {
+      $this->add($ind);
+    }
+  }
 /*
   public function delete(Individu $perso)
   {
