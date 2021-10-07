@@ -1,32 +1,36 @@
 <?php
 
 class AlgoGen {
-    private array $population;
+    private array $population=[];
     private Data $data;
     private IndividuManager $im; 
 
-    public const NB_INDIVIDUS = 100;
+    public const NB_INDIVIDUS = 300;
     public const NB_MUTATION = 2; // parmi la population
-    public const NB_GENERATIONS = 15;
+    public const NB_GENERATIONS = 100;
 
     public function __construct(Data $data, IndividuManager $im)   {
         $this->data = $data;
         $this->im = $im;
         // population aléatoire
-        for ($i=0;$i<self::NB_INDIVIDUS;$i++) {
+        $i=0;
+        while ($i<self::NB_INDIVIDUS) {
             $ind = new Individu(0);
             $data->eval($ind); 
-            //$im->add($ind);
-            $this->population[] = $ind;
+            if (!$this->estRepete($ind)){
+                $im->add($ind);
+                $this->population[] = $ind;
+                $i++;
+            }
         }
         usort($this->population, "self::cmp");
-        //var_dump( $this->population );
+        var_dump( $this->population );
     }
     static function cmp(Individu $a, Individu $b)    {
         return ($a->getGain() < $b->getGain()) ? +1 : -1;
     }
     public function estRepete(Individu $ind){
-        for ($i=0;$i<self::NB_INDIVIDUS;$i++) {
+        for ($i=0;$i<sizeof($this->population);$i++) {
             if ($ind->getChromo() == $this->population[$i]->getChromo())
                 return true;
         }

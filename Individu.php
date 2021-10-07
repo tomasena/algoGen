@@ -48,21 +48,23 @@ class Individu{
     }
     private function construct1(String $chromo, int $ng){
         $this->chromo = $chromo;
-        $this->unXdeux= bindec((int) substr($chromo,0,2));   // trois posibles valeurs : 0, 1, 2
+        $this->unXdeux= bindec(substr($chromo,0,2));   // trois posibles valeurs : 0, 1, 2
         $this->valUnXdeux =  ($this->unXdeux == 0) ? "H" : (($this->unXdeux == 1) ? "D" : "A");
-        $this->cote= bindec((int) substr($chromo,2,self::COTE)) ;
-        $this->diff= bindec((int) substr($chromo,self::COTE+2,self::DIFF));
+        $this->cote= bindec(substr($chromo,2,self::COTE)) ;
+        $this->diff= bindec(substr($chromo,self::COTE+2,self::DIFF));
        
         $this->valCote= (self::$intervalCote) * $this->cote + 1.0;
         $this->valDiff= (self::$intervalDiff) * $this->diff - 2.0;
         $this->ng = $ng;
     }    
     public function reproduction(Individu $b) { // crossover entre $this et $b
-        $cut = random_int(1,strlen($b->getChromo()-1)); // coupes : 0 à ($cut-1) et $cut à length
+        $cut = random_int(2,strlen($b->getChromo())-1); // coupes : 0 à ($cut-1) et $cut à length
         $a1 = substr($this->getChromo(),0,$cut);
         $b1 = substr($b->getChromo(),0,$cut);
         $a2 = substr($this->getChromo(),$cut,strlen($this->getChromo()));
         $b2 = substr($b->getChromo(),$cut,strlen($b->getChromo()));
+        //echo "new Individu($a1 . $b2 <br>";
+        //echo "new Individu($b1 . $a2 <br>";
         $a1b2 = new Individu($a1 . $b2, $this->ng+1);
         $b1a2 = new Individu($b1 . $a2, $this->ng+1);
         return array($a1b2,$b1a2);
@@ -70,12 +72,14 @@ class Individu{
     public function mute(){
         $chromo = $this->getChromo();
         //echo "mute : $chromo";
-        $nBit = random_int(0,strlen($chromo)-1);
-        $bit = substr($chromo,$nBit,1);
-        $bit = ($bit == "1") ? "0" : "1";
-        $chromo = substr_replace($chromo, $bit, $nBit, 1); 
-        //echo " -> $chromo <br>";
-        return new Individu($chromo, $this->ng+1);
+        do {
+            $nBit = random_int(0,strlen($chromo)-1);
+            $bit = substr($chromo,$nBit,1);
+            $bit = ($bit == "1") ? "0" : "1";
+            $chromoNew = substr_replace($chromo, $bit, $nBit, 1); 
+            } while (substr($chromoNew,0,2) == "11");
+        //echo "$chromo -> $chromoNew <br>";
+        return new Individu($chromoNew, $this->ng+1);
     }
     public function gen(int $max){ //entier aleatoire entre 0 et $max
         return random_int(0, $max);

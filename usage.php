@@ -18,7 +18,7 @@ $data = new Data( '../donnees/data3.csv');
 $manager = new IndividuManager($db);
 
 $ag = new AlgoGen($data,$manager); //individus aléatoires
-$ag->evolution();
+//$ag->evolution();
 
 
 
